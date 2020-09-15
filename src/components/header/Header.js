@@ -1,5 +1,5 @@
-import React from 'react';
-import { Flex, Heading } from '@chakra-ui/core';
+import React from "react";
+import { Flex, Heading } from "@chakra-ui/core";
 
 const Header = () => {
   return (
@@ -12,7 +12,7 @@ const Header = () => {
       color="white"
     >
       <Flex align="center" mr={5}>
-        <Heading as="h1" size="lg" letterSpacing={'-.1rem'}>
+        <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
           React Query Test
         </Heading>
       </Flex>
