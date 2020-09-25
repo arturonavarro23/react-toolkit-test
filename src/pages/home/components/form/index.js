@@ -6,11 +6,6 @@ import {
   Input,
   Button,
   Box,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
 } from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
 
@@ -33,7 +28,7 @@ const Form = () => {
 
   useEffect(() => {
     if (status === 'success') {
-      reset({ number: null });
+      reset();
     }
   }, [status, reset]);
 
@@ -73,13 +68,7 @@ const Form = () => {
           isInvalid={errors.raiting?.message && touched.raiting}
         >
           <FormLabel>Raiting</FormLabel>
-          <NumberInput isInvalid={errors.raiting?.message && touched.raiting}>
-            <NumberInputField name="raiting" type="number" ref={register} />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
+          <Input name="raiting" type="text" ref={register} />
           <FormErrorMessage>{errors.raiting?.message}</FormErrorMessage>
         </FormControl>
         <Button
