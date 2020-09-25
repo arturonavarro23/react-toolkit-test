@@ -49,11 +49,11 @@ const Form = () => {
         </FormControl>
         <FormControl
           mt={6}
-          isInvalid={errors.imageUrl?.message && touched.imageUrl}
+          isInvalid={errors.img?.message && touched.img}
         >
           <FormLabel>Image Url</FormLabel>
           <Input name="img" type="text" ref={register} />
-          <FormErrorMessage>{errors.imageUrl?.message}</FormErrorMessage>
+          <FormErrorMessage>{errors.img?.message}</FormErrorMessage>
         </FormControl>
         <FormControl
           mt={6}
@@ -72,7 +72,7 @@ const Form = () => {
           <FormErrorMessage>{errors.raiting?.message}</FormErrorMessage>
         </FormControl>
         <Button
-          width="full"
+          width={{xs: 'full', lg: '200px'}}
           mt={4}
           type="submit"
           isDisabled={status === 'loading'}

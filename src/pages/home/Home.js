@@ -4,13 +4,14 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
-  SimpleGrid,
+  Stack,
   Box,
   Image,
-  Divider,
+  Flex,
 } from "@chakra-ui/core";
 import useGetRestaurants from "../../hooks/useGetRestaurants";
 import Form from "./components/form";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const { status, data } = useGetRestaurants();
@@ -31,31 +32,27 @@ const Home = () => {
           <AlertTitle mr={2}>Error</AlertTitle>
         </Alert>
       )}
-      {status === "success" && (
-        <SimpleGrid columns={{ xs: 2, lg: 5 }} spacing={10} marginTop={10}>
-          {data.map((d) => (
-            <React.Fragment key={d.name}>
-              <Box>
-                <Image height="100px" src={d.img} alt={d.name} />
-              </Box>
-              <Box d={{ xs: "none", lg: "flex" }} alignItems="center">
-                {d.id}
-              </Box>
-              <Box d="flex" alignItems="center">
-                {d.name}
-              </Box>
-              <Box d={{ xs: "none", lg: "flex" }} alignItems="center">
-                {d.address}
-              </Box>
-              <Box d={{ xs: "none", lg: "flex" }} alignItems="center">
-                {d.raiting}
-              </Box>
-            </React.Fragment>
-          ))}
-        </SimpleGrid>
-      )}
-      <Divider my="30px" />
-      <Form />
+      <Flex direction={{ xs: "column", lg: "row" }}>
+        <Flex
+          w={{ xs: "100%", lg: "500px" }}
+          direction="column"
+          marginTop={10}
+          marginRight={{ xs: "0", lg: "20px" }}
+        >
+          {status === "success" &&
+            data.map((d) => (
+              <Stack key={d.name} isInline marginBottom="15px">
+                <Box marginRight="20px">
+                  <Image height="30px" src={d.img} alt={d.name} />
+                </Box>
+                <Box d="flex" flex={1}>
+                  <Link to={`/restaurant/${d.id}`}>{d.name}</Link>
+                </Box>
+              </Stack>
+            ))}
+        </Flex>
+        <Form />
+      </Flex>
     </>
   );
 };
