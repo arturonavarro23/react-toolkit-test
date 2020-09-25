@@ -6,9 +6,7 @@ import useSearchRestaurant from '../../hooks/useSearchRestaurant';
 const SearchByName = () => {
   const [term, setTerm] = useState('');
   const [debouncedTerm, setDebouncedTerm] = useState(term);
-  const { status, data } = useSearchRestaurant(debouncedTerm);
-
-  console.log(status, data);
+  const { data } = useSearchRestaurant(debouncedTerm);
 
   useEffect(() => {
     const handler = setTimeout(() => {
