@@ -9,10 +9,9 @@ import {
 } from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
 
-import useCreateRestaurant from '../../../../hooks/useCreateRestaurant';
 import { resolver } from './validations';
 
-const Form = () => {
+const Form = ({ onSubmit, isLoading, clearValues, defaultValues = {} }) => {
   const {
     register,
     handleSubmit,
@@ -22,18 +21,17 @@ const Form = () => {
   } = useForm({
     resolver,
     mode: 'all',
+    defaultValues,
   });
 
-  const [createRestaurant, { status }] = useCreateRestaurant();
-
   useEffect(() => {
-    if (status === 'success') {
+    if (clearValues) {
       reset();
     }
-  }, [status, reset]);
+  }, [clearValues, reset]);
 
-  const onSubmit = (values) => {
-    createRestaurant(values);
+  const onSubmitForm = (values) => {
+    onSubmit(values);
   };
 
   return (
@@ -41,16 +39,13 @@ const Form = () => {
       width={{ sm: '100%', md: '70%', lg: '50%' }}
       m={{ sm: '0 20px', lg: 0 }}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmitForm)}>
         <FormControl isInvalid={errors.name?.message && touched.name}>
           <FormLabel>Name</FormLabel>
           <Input name="name" type="text" ref={register} />
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
         </FormControl>
-        <FormControl
-          mt={6}
-          isInvalid={errors.img?.message && touched.img}
-        >
+        <FormControl mt={6} isInvalid={errors.img?.message && touched.img}>
           <FormLabel>Image Url</FormLabel>
           <Input name="img" type="text" ref={register} />
           <FormErrorMessage>{errors.img?.message}</FormErrorMessage>
@@ -72,10 +67,10 @@ const Form = () => {
           <FormErrorMessage>{errors.raiting?.message}</FormErrorMessage>
         </FormControl>
         <Button
-          width={{xs: 'full', lg: '200px'}}
+          width={{ xs: 'full', lg: '200px' }}
           mt={4}
           type="submit"
-          isDisabled={status === 'loading'}
+          isDisabled={isLoading}
         >
           Add a Restaurant
         </Button>
