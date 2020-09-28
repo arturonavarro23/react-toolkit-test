@@ -8,19 +8,31 @@ import {
   Box,
   Image,
   Flex,
+  Button,
+  Text,
 } from '@chakra-ui/core';
-import useGetRestaurants from '../../hooks/useGetRestaurants';
+import { Link, useHistory } from 'react-router-dom';
+import useGetPaginatedRestaurants from '../../hooks/useGetPaginatedRestaurants';
 import useCreateRestaurant from '../../hooks/useCreateRestaurant';
+import useQueryParams from '../../hooks/useQueryParams';
 import Form from '../../components/form';
-import { Link } from 'react-router-dom';
 
 const Home = () => {
-  const { status, data } = useGetRestaurants();
+  const { page = 1 } = useQueryParams();
+  const history = useHistory();
+  const {
+    status,
+    resolvedData,
+    latestData,
+    isFetching,
+  } = useGetPaginatedRestaurants(page);
   const [createRestaurant, { isLoading, isSuccess }] = useCreateRestaurant();
 
   const onSubmit = (values) => {
     createRestaurant(values);
   };
+
+  console.log(resolvedData, latestData);
 
   return (
     <>
@@ -45,17 +57,46 @@ const Home = () => {
           marginTop={10}
           marginRight={{ xs: '0', lg: '20px' }}
         >
-          {status === 'success' &&
-            data.map((d) => (
-              <Stack key={d.name} isInline marginBottom="15px">
-                <Box marginRight="20px">
-                  <Image height="30px" src={d.img} alt={d.name} />
-                </Box>
-                <Box d="flex" flex={1}>
-                  <Link to={`/restaurant/${d.id}`}>{d.name}</Link>
-                </Box>
+          {status === 'success' && (
+            <>
+              {resolvedData.restaurants.map((d) => (
+                <Stack key={d.name} isInline marginBottom="15px">
+                  <Box marginRight="20px">
+                    <Image height="40px" src={d.img} alt={d.name} />
+                  </Box>
+                  <Box d="flex" flex={1} alignItems="center">
+                    <Link to={`/restaurant/${d.id}`}>{d.name}</Link>
+                  </Box>
+                </Stack>
+              ))}
+              <Stack isInline marginBottom="15px">
+                <Button
+                  variantColor="teal"
+                  size="xs"
+                  isDisabled={!latestData?.pagitnation?.prev}
+                  onClick={() =>
+                    history.push(`/?page=${latestData.pagitnation.prev}`)
+                  }
+                >
+                  Prev
+                </Button>
+                <Text mx="10px">
+                  {`${resolvedData.pagitnation.current}/${resolvedData.pagitnation.pages}`}
+                </Text>
+                <Button
+                  variantColor="teal"
+                  size="xs"
+                  isDisabled={!latestData?.pagitnation?.next}
+                  onClick={() =>
+                    history.push(`/?page=${latestData.pagitnation.next}`)
+                  }
+                >
+                  Next
+                </Button>
+                {isFetching && <Text ml="10px">Loading...</Text>}
               </Stack>
-            ))}
+            </>
+          )}
         </Flex>
         <Form
           onSubmit={onSubmit}

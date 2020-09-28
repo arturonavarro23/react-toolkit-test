@@ -12,6 +12,7 @@ export default () => {
   return useMutation(createRestaurant, {
     onSuccess: () => {
       queryCache.invalidateQueries('restaurants');
+      queryCache.invalidateQueries('paginated-restautrants');
     },
   });
 };
