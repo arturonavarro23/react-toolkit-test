@@ -37,7 +37,6 @@ export default () => {
     // Always refetch after error or success:
     onSettled: (newRestaurant) => {
       // queryCache.invalidateQueries('restaurants');
-      queryCache.invalidateQueries('paginated-restautrants');
       queryCache.invalidateQueries(['restaurants', newRestaurant.id]);
       queryCache.invalidateQueries('searchRestaurant');
     },

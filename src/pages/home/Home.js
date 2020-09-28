@@ -32,8 +32,6 @@ const Home = () => {
     createRestaurant(values);
   };
 
-  console.log(resolvedData, latestData);
-
   return (
     <>
       <Heading as="h6" fontSize="1.2em">
