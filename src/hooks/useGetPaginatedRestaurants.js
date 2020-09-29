@@ -1,4 +1,5 @@
-import { usePaginatedQuery } from 'react-query';
+import React from 'react';
+import { usePaginatedQuery, useQueryCache } from 'react-query';
 import api from '../api';
 
 const LIMIT = 4;
@@ -17,11 +18,26 @@ const getRestaurants = async (key, page) => {
       prev: page > 1 ? page - 1 : null,
       current: page,
       next: LIMIT * page < headers['x-total-count'] ? page + 1 : null,
-      pages: Math.ceil(headers['x-total-count']/LIMIT),
+      pages: Math.ceil(headers['x-total-count'] / LIMIT),
     },
   };
 };
 
 export default (page = 0) => {
-  return usePaginatedQuery(['paginated-restautrants', page], getRestaurants);
+  const cache = useQueryCache();
+  const { latestData, ...rest } = usePaginatedQuery(
+    ['paginated-restautrants', page],
+    getRestaurants
+  );
+
+  React.useEffect(() => {
+    if (latestData?.pagitnation?.next) {
+      cache.prefetchQuery(['paginated-restautrants', page + 1], getRestaurants);
+    }
+  }, [latestData, page, cache]);
+
+  return {
+    latestData,
+    ...rest,
+  };
 };

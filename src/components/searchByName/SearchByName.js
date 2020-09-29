@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FormLabel, FormControl, Input, Box, Text } from '@chakra-ui/core';
+import { Link } from 'react-router-dom';
 
 import useSearchRestaurant from '../../hooks/useSearchRestaurant';
 
@@ -28,11 +29,14 @@ const SearchByName = () => {
           autoComplete="off"
         />
       </FormControl>
-      {data && data.map(r => (
-        <Box key={r.id} mt="5px">
-          <Text>{r.name}</Text>
-        </Box>
-      ))}
+      {data &&
+        data.map((r) => (
+          <Box key={r.id} mt="5px">
+            <Text as={Link} to={`/restaurant/${r.id}`}>
+              {r.name}
+            </Text>
+          </Box>
+        ))}
     </>
   );
 };
