@@ -1,5 +1,5 @@
-import { useQuery } from "react-query";
-import api from "../api";
+import { useQuery } from 'react-query';
+import api from '../api';
 
 const getRestaurantById = async (key, id) => {
   const res = await api.get(`restaurants/${id}`);
@@ -7,5 +7,5 @@ const getRestaurantById = async (key, id) => {
 };
 
 export default (id) => {
-  return useQuery(["restaurants", id], getRestaurantById);
+  return useQuery(['restaurants', id], getRestaurantById);
 };

@@ -32,7 +32,7 @@ const SearchByName = () => {
       {data &&
         data.map((r) => (
           <Box key={r.id} mt="5px">
-            <Text as={Link} to={`/restaurant/${r.id}`}>
+            <Text as={Link} to={`/restaurants/${r.id}`}>
               {r.name}
             </Text>
           </Box>

@@ -24,7 +24,7 @@ function App() {
           <Flex flex={3} p={5} direction="column">
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route exact path="/restaurant/:id" component={Details} />
+              <Route exact path="/restaurants/:id" component={Details} />
             </Switch>
           </Flex>
         </Flex>

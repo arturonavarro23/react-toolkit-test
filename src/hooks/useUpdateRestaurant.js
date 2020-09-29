@@ -11,34 +11,27 @@ export default () => {
 
   return useMutation(updateRestaurant, {
     onMutate: (newRestaurant) => {
-      console.log(newRestaurant);
-      queryCache.cancelQueries('restaurants');
-      queryCache.cancelQueries(['restaurants', newRestaurant.id]);
+      queryCache.cancelQueries(['restaurants', newRestaurant.id.toString()]);
 
-      // const previousRestaurants = queryCache.getQueryData('restaurants');
       const previousRestaurant = queryCache.getQueryData([
         'restaurants',
-        newRestaurant.id,
+        newRestaurant.id.toString(),
       ]);
 
       // Optimistically update to the new value
-      // queryCache.setQueryData('restaurants', (old) => [...old, newRestaurant]);
-      queryCache.setQueryData(['restaurants', newRestaurant.id], newRestaurant);
+      queryCache.setQueryData(['restaurants', newRestaurant.id.toString()], newRestaurant);
 
       return () => {
-        // queryCache.setQueryData('restaurants', previousRestaurants);
         queryCache.setQueryData(
-          ['restaurants', newRestaurant.id],
+          ['restaurants', newRestaurant.id.toString()],
           previousRestaurant
         );
       };
     },
-    onError: (err, newTodo, rollback) => rollback(),
+    onError: (err, newRestaurant, rollback) => rollback(),
     // Always refetch after error or success:
     onSettled: (newRestaurant) => {
-      // queryCache.invalidateQueries('restaurants');
-      queryCache.invalidateQueries(['restaurants', newRestaurant.id]);
-      queryCache.invalidateQueries('searchRestaurant');
+      queryCache.invalidateQueries(['restaurants', newRestaurant.id.toString()]);
     },
   });
 };

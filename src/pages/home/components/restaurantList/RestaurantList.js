@@ -18,7 +18,7 @@ const RestaurantList = ({ restaurants, pagination, isFetching }) => {
             <Image height="40px" src={d.img} alt={d.name} />
           </Box>
           <Box d="flex" flex={1} alignItems="center">
-            <Link to={`/restaurant/${d.id}`}>{d.name}</Link>
+            <Link to={`/restaurants/${d.id}`}>{d.name}</Link>
           </Box>
         </Stack>
       ))}
