@@ -1,17 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  Box,
-  Heading,
-  Image,
-  Stack,
-  Text,
-  Flex,
-} from '@chakra-ui/core';
+import { Box, Heading, Image, Stack, Text, Flex } from '@chakra-ui/core';
 import Form from '../../components/form';
+import Error from '../../components/error';
 import useGetRestaurantById from '../../hooks/useGetRestaurantById';
 import useUpdateRestaurant from '../../hooks/useUpdateRestaurant';
 
@@ -32,12 +23,7 @@ const Details = () => {
   }
 
   if (status === 'error') {
-    return (
-      <Alert status="error" w="100%" mt="1.5em" variant="left-accent">
-        <AlertIcon />
-        <AlertTitle mr={2}>Error</AlertTitle>
-      </Alert>
-    );
+    return <Error />;
   }
 
   return (

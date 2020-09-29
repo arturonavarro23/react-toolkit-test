@@ -14,7 +14,7 @@ const getRestaurants = async (key, page) => {
   return {
     restaurants: data,
     total: headers['x-total-count'],
-    pagitnation: {
+    pagination: {
       prev: page > 1 ? page - 1 : null,
       current: page,
       next: LIMIT * page < headers['x-total-count'] ? page + 1 : null,
@@ -31,7 +31,7 @@ export default (page = 0) => {
   );
 
   React.useEffect(() => {
-    if (latestData?.pagitnation?.next) {
+    if (latestData?.pagination?.next) {
       cache.prefetchQuery(['paginated-restautrants', page + 1], getRestaurants);
     }
   }, [latestData, page, cache]);
