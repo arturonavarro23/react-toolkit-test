@@ -18,7 +18,6 @@ export default () => {
         newRestaurant.id.toString(),
       ]);
 
-      // Optimistically update to the new value
       queryCache.setQueryData(['restaurants', newRestaurant.id.toString()], newRestaurant);
 
       return () => {
@@ -29,7 +28,6 @@ export default () => {
       };
     },
     onError: (err, newRestaurant, rollback) => rollback(),
-    // Always refetch after error or success:
     onSettled: (newRestaurant) => {
       queryCache.invalidateQueries(['restaurants', newRestaurant.id.toString()]);
     },

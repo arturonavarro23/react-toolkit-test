@@ -17,7 +17,6 @@ const Home = () => {
     isFetching,
   } = useGetPaginatedRestaurants(page);
   const [createRestaurant, { isLoading, isSuccess }] = useCreateRestaurant();
-
   const onSubmit = (values) => {
     createRestaurant(values);
   };

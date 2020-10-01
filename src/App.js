@@ -29,7 +29,7 @@ function App() {
           </Flex>
         </Flex>
       </Router>
-      <ReactQueryDevtools />
+      <ReactQueryDevtools initialIsOpen={false} />
     </ThemeProvider>
   );
 }
