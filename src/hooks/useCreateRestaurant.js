@@ -6,7 +6,7 @@ const createRestaurant = async (restaurant) => {
   return res.data;
 };
 
-export default () => {
+export const useCreateRestaurant = () => {
   const queryCache = useQueryCache();
 
   return useMutation(createRestaurant, {
@@ -16,3 +16,5 @@ export default () => {
     },
   });
 };
+
+export default useCreateRestaurant;

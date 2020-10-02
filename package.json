@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^12.1.6",
     "axios": "^0.20.0",
     "emotion-theming": "^10.0.27",
+    "nock": "^13.0.4",
     "query-string": "^6.13.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -45,6 +46,8 @@
     ]
   },
   "devDependencies": {
-    "jest-environment-jsdom-sixteen": "^1.0.3"
+    "@testing-library/react-hooks": "^3.4.2",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "react-test-renderer": "^16.13.1"
   }
 }

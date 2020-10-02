@@ -3,3 +3,12 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
+import axios from 'axios';
+import { setConsole } from 'react-query';
+
+setConsole({
+  log: () => {},
+  warn: () => {},
+  error: () => {},
+});
+axios.defaults.adapter = require('axios/lib/adapters/http');

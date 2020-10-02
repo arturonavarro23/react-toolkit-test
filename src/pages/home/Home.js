@@ -1,15 +1,14 @@
 import React from 'react';
 import { Heading, Flex } from '@chakra-ui/core';
-import useGetPaginatedRestaurants from '../../hooks/useGetPaginatedRestaurants';
-import useCreateRestaurant from '../../hooks/useCreateRestaurant';
-import useQueryParams from '../../hooks/useQueryParams';
+import { useGetPaginatedRestaurants } from '../../hooks/useGetPaginatedRestaurants';
+import { useCreateRestaurant } from '../../hooks/useCreateRestaurant';
+import { useQueryParams } from '../../hooks/useQueryParams';
 import Form from '../../components/form';
 import Error from '../../components/error';
 import RestaurantList from './components/restaurantList';
 
 const Home = () => {
   const { page = 1 } = useQueryParams();
-
   const {
     status,
     resolvedData,
@@ -17,9 +16,10 @@ const Home = () => {
     isFetching,
   } = useGetPaginatedRestaurants(page);
   const [createRestaurant, { isLoading, isSuccess }] = useCreateRestaurant();
-  const onSubmit = (values) => {
+
+  function onSubmit(values) {
     createRestaurant(values);
-  };
+  }
 
   return (
     <>

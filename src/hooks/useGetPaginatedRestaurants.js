@@ -11,6 +11,7 @@ const getRestaurants = async (key, page) => {
       _limit: LIMIT,
     },
   });
+
   return {
     restaurants: data,
     total: headers['x-total-count'],
@@ -23,7 +24,7 @@ const getRestaurants = async (key, page) => {
   };
 };
 
-export default (page = 0) => {
+export const useGetPaginatedRestaurants = (page = 0) => {
   const cache = useQueryCache();
   const { latestData, ...rest } = usePaginatedQuery(
     ['paginated-restautrants', page],
@@ -41,3 +42,5 @@ export default (page = 0) => {
     ...rest,
   };
 };
+
+export default useGetPaginatedRestaurants;

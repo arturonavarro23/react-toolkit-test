@@ -13,7 +13,7 @@ const RestaurantList = ({ restaurants, pagination, isFetching }) => {
   return (
     <>
       {restaurants.map((d) => (
-        <Stack key={d.name} isInline marginBottom="15px">
+        <Stack key={d.id} isInline marginBottom="15px">
           <Box marginRight="20pxº">
             <Image height="40px" src={d.img} alt={d.name} />
           </Box>
@@ -26,7 +26,7 @@ const RestaurantList = ({ restaurants, pagination, isFetching }) => {
         <Button
           variantColor="teal"
           size="xs"
-          isDisabled={!pagination?.prev}
+          isDisabled={!pagination?.prev || isFetching}
           onClick={() => history.push(`/?page=${pagination.prev}`)}
         >
           Prev
@@ -37,7 +37,7 @@ const RestaurantList = ({ restaurants, pagination, isFetching }) => {
         <Button
           variantColor="teal"
           size="xs"
-          isDisabled={!pagination?.next}
+          isDisabled={!pagination?.next || isFetching}
           onClick={() => history.push(`/?page=${pagination.next}`)}
         >
           Next
