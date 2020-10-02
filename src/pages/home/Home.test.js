@@ -110,28 +110,30 @@ function setupWithErrorRestaurantsRequest() {
   return { ...utils };
 }
 
-test('should call createRestaurant', async () => {
-  // arrange
-  const utils = setupWithSuccesfullFormSubmit();
+describe('<Home />', () => {
+  test('should call createRestaurant', async () => {
+    // arrange
+    const utils = setupWithSuccesfullFormSubmit();
 
-  // assert
-  await waitFor(() => {
-    expect(utils.createRestaurant).toHaveBeenCalledTimes(1);
+    // assert
+    await waitFor(() => {
+      expect(utils.createRestaurant).toHaveBeenCalledTimes(1);
+    });
   });
-});
 
-test('should render a restaurant list', async () => {
-  // arrange
-  setupWithSuccesfullRestaurantsRequest();
+  test('should render a restaurant list', async () => {
+    // arrange
+    setupWithSuccesfullRestaurantsRequest();
 
-  // assert
-  expect(screen.getAllByAltText(/Restaurant Name/i)).toHaveLength(4);
-});
+    // assert
+    expect(screen.getAllByAltText(/Restaurant Name/i)).toHaveLength(4);
+  });
 
-test('should display the error message', async () => {
-  // arrange
-  setupWithErrorRestaurantsRequest();
+  test('should display the error message', async () => {
+    // arrange
+    setupWithErrorRestaurantsRequest();
 
-  // assert
-  expect(screen.getByText("Error")).toBeInTheDocument();
+    // assert
+    expect(screen.getByText('Error')).toBeInTheDocument();
+  });
 });

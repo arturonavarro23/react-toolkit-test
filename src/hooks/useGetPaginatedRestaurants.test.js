@@ -1,27 +1,9 @@
-import React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import nock from 'nock';
-import {
-  ReactQueryCacheProvider,
-  queryCache,
-  makeQueryCache,
-} from 'react-query';
+import { queryCache } from 'react-query';
 
+import { wrapper } from '../utils/test';
 import { useGetPaginatedRestaurants } from './useGetPaginatedRestaurants';
-
-const queryConfig = makeQueryCache({
-  defaultConfig: {
-    queries: {
-      retry: 0,
-    },
-  },
-});
-
-const wrapper = ({ children }) => (
-  <ReactQueryCacheProvider queryCache={queryConfig}>
-    {children}
-  </ReactQueryCacheProvider>
-);
 
 function setup() {
   return renderHook(({ page }) => useGetPaginatedRestaurants(page), {
@@ -67,18 +49,21 @@ describe('useGetPaginatedRestaurants', () => {
   });
 
   test('should return a list of restaurants', async () => {
+    // arrange
     const { result, waitFor } = setupWithSuccesfullRequest();
 
+    //assert
     await waitFor(() => {
       expect(result.current.status).toBe('success');
     });
-
     expect(result.current.resolvedData.restaurants).toHaveLength(1);
   });
 
   test('should return an error status', async () => {
+    // arrange
     const { result, waitFor } = setupWithErrorRequest();
 
+    //assert
     await waitFor(() => {
       expect(result.current.status).toBe('error');
     });
