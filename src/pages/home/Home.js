@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Heading, Flex } from '@chakra-ui/core';
-import { useGetPaginatedRestaurants } from '../../hooks/useGetPaginatedRestaurants';
-import { useCreateRestaurant } from '../../hooks/useCreateRestaurant';
 import { useQueryParams } from '../../hooks/useQueryParams';
+import {
+  getRestaurantList,
+  createRestaurant,
+} from '../../store/actions/restaurantListActions';
 import Form from '../../components/form';
 import Error from '../../components/error';
 import RestaurantList from './components/restaurantList';
 
+import { useDispatch, useSelector } from 'react-redux';
+
 const Home = () => {
   const { page = 1 } = useQueryParams();
+  const dispatch = useDispatch();
   const {
-    status,
-    resolvedData,
-    latestData,
-    isFetching,
-  } = useGetPaginatedRestaurants(page);
-  const [createRestaurant, { isLoading, isSuccess }] = useCreateRestaurant();
+    items,
+    error,
+    pagination,
+    loading,
+    createLoading,
+    restaurantIsCreated,
+  } = useSelector((state) => state.restaurantList);
+
+  useEffect(() => {
+    dispatch(getRestaurantList(page));
+  }, [page, dispatch]);
 
   function onSubmit(values) {
-    createRestaurant(values);
+    dispatch(createRestaurant(values));
   }
 
   return (
@@ -33,19 +43,19 @@ const Home = () => {
           marginTop={10}
           marginRight={{ xs: '0', lg: '20px' }}
         >
-          {status === 'error' && <Error />}
-          {status === 'success' && (
+          {error && <Error />}
+          {items.length > 0 && !error && (
             <RestaurantList
-              isFetching={isFetching}
-              restaurants={resolvedData.restaurants}
-              pagination={latestData?.pagination}
+              isFetching={loading === 'pending'}
+              restaurants={items}
+              pagination={pagination}
             />
           )}
         </Flex>
         <Form
           onSubmit={onSubmit}
-          isLoading={isLoading}
-          clearValues={!isLoading && isSuccess}
+          isLoading={createLoading === 'pending'}
+          clearValues={restaurantIsCreated}
         />
       </Flex>
     </>
