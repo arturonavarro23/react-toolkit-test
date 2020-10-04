@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { Heading, Flex } from '@chakra-ui/core';
-import { useQueryParams } from '../../hooks/useQueryParams';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   getRestaurantList,
   createRestaurant,
 } from '../../store/actions/restaurantListActions';
+import { useQueryParams } from '../../hooks/useQueryParams';
 import Form from '../../components/form';
 import Error from '../../components/error';
 import RestaurantList from './components/restaurantList';
-
-import { useDispatch, useSelector } from 'react-redux';
 
 const Home = () => {
   const { page = 1 } = useQueryParams();

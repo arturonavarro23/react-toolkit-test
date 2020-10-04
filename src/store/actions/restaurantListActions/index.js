@@ -30,7 +30,6 @@ export const createRestaurant = (restaurant) => async (dispatch, store) => {
     dispatch(getRestaurantList(restaurantList.pagination.current));
     dispatch(actions.setRestaurantIsCreated());
   } catch (e) {
-    console.log(e);
     dispatch(actions.setError(e));
   }
 };
