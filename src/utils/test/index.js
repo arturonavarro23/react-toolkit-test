@@ -1,16 +1,9 @@
 import React from 'react';
-import { ReactQueryCacheProvider, makeQueryCache } from 'react-query';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from '@chakra-ui/core';
 
-export const queryConfig = makeQueryCache({
-  defaultConfig: {
-    queries: {
-      retry: 0,
-    },
-  },
-});
-
-export const wrapper = ({ children }) => (
-  <ReactQueryCacheProvider queryCache={queryConfig}>
-    {children}
-  </ReactQueryCacheProvider>
+export const wrapper = (store) => ({ children }) => (
+  <Provider store={store}>
+    <ThemeProvider>{children}</ThemeProvider>
+  </Provider>
 );

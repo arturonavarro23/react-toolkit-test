@@ -1,139 +1,141 @@
-// import React from 'react';
-// import { render, screen, waitFor } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
-// import { MemoryRouter } from 'react-router-dom';
-// import { ThemeProvider } from '@chakra-ui/core';
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
+import * as reactRedux from 'react-redux';
+import configureStore from 'redux-mock-store'
 
-// import * as CreateHook from '../../hooks/useCreateRestaurant';
-// import * as PaginatedHook from '../../hooks/useGetPaginatedRestaurants';
-// import Home from './Home';
+import { wrapper } from '../../utils/test/index';
+import * as restaurantListActions from '../../store/actions/restaurantListActions';
 
-// function geMockedRestaurants() {
-//   return [...Array(4).keys()].map((i) => ({
-//     id: i + 1,
-//     name: `Restaurant Name ${i + 1}`,
-//     img: 'Image',
-//   }));
-// }
+import Home from './Home';
+import thunk from 'redux-thunk';
 
-// function setup() {
-//   const restaurant = {
-//     name: 'name',
-//     img: 'imageURl',
-//     address: 'address',
-//     raiting: '4.5',
-//   };
+function geMockedRestaurants() {
+  return [...Array(4).keys()].map((i) => ({
+    id: i + 1,
+    name: `Restaurant Name ${i + 1}`,
+    img: 'Image',
+  }));
+}
 
-//   const utils = render(
-//     <ThemeProvider>
-//       <MemoryRouter>
-//         <Home />
-//       </MemoryRouter>
-//     </ThemeProvider>
-//   );
+function setup(store) {
+  const restaurant = {
+    name: 'name',
+    img: 'imageURl',
+    address: 'address',
+    raiting: '4.5',
+  };
 
-//   const changeInputValue = (name, value) => {
-//     userEvent.type(screen.getByRole('textbox', { name }), value);
-//   };
+  const defaultStore = configureStore([thunk])({
+    restaurantList:{
+      items: geMockedRestaurants(),
+      error: null,
+      pagination: null,
+      loading: 'idle',
+      createLoading: 'idle',
+      restaurantIsCreated: false,
+    },
+  });
 
-//   const clickSubmit = async () => {
-//     userEvent.click(screen.getByRole('button', { name: 'Add a Restaurant' }));
-//   };
+  const getRestaurantList = jest.fn();
+  const createRestaurant = jest.fn();
 
-//   return {
-//     ...utils,
-//     restaurant,
-//     changeInputValue,
-//     clickSubmit,
-//   };
-// }
+  jest
+    .spyOn(restaurantListActions, 'getRestaurantList')
+    .mockImplementation(getRestaurantList);
+  jest
+    .spyOn(restaurantListActions, 'createRestaurant')
+    .mockImplementation(createRestaurant);
 
-// function setupWithSuccesfullFormSubmit() {
-//   const createRestaurant = jest.fn();
-//   jest
-//     .spyOn(CreateHook, 'useCreateRestaurant')
-//     .mockImplementationOnce(() => [
-//       createRestaurant,
-//       { isLoading: false, isSuccess: false },
-//     ]);
+  jest
+    .spyOn(reactRedux, 'useDispatch')
+    .mockImplementation(() => jest.fn());
 
-//   jest
-//     .spyOn(PaginatedHook, 'useGetPaginatedRestaurants')
-//     .mockImplementationOnce(() => ({}));
+  const utils = render(
+    <MemoryRouter>
+      <Home />,
+    </MemoryRouter>,
+    {
+      wrapper: wrapper(store || defaultStore)
+    },
+  );
 
-//   const utils = setup();
-//   utils.changeInputValue(/name/i, utils.restaurant.name);
-//   utils.changeInputValue(/image/i, utils.restaurant.img);
-//   utils.changeInputValue(/address/i, utils.restaurant.address);
-//   utils.changeInputValue(/raiting/i, utils.restaurant.raiting);
-//   utils.clickSubmit();
-//   return { createRestaurant, ...utils };
-// }
+  const changeInputValue = (name, value) => {
+    userEvent.type(screen.getByRole('textbox', { name }), value);
+  };
 
-// function setupWithSuccesfullRestaurantsRequest() {
-//   jest
-//     .spyOn(CreateHook, 'useCreateRestaurant')
-//     .mockImplementationOnce(() => [jest.fn(), {}]);
+  const clickSubmit = async () => {
+    userEvent.click(screen.getByRole('button', { name: 'Add a Restaurant' }));
+  };
 
-//   jest
-//     .spyOn(PaginatedHook, 'useGetPaginatedRestaurants')
-//     .mockImplementationOnce(() => ({
-//       status: 'success',
-//       resolvedData: { restaurants: [...geMockedRestaurants()] },
-//       latestData: {
-//         pagination: { prev: null, current: 1, pages: 1, next: null },
-//       },
-//       isFetching: false,
-//     }));
+  return {
+    ...utils,
+    restaurant,
+    changeInputValue,
+    clickSubmit,
+    getRestaurantList,
+    createRestaurant,
+  };
+}
 
-//   const utils = setup();
+function setupWithSuccesfullFormSubmit() {
+  const utils = setup();
+  utils.changeInputValue(/name/i, utils.restaurant.name);
+  utils.changeInputValue(/image/i, utils.restaurant.img);
+  utils.changeInputValue(/address/i, utils.restaurant.address);
+  utils.changeInputValue(/raiting/i, utils.restaurant.raiting);
+  utils.clickSubmit();
+  return { ...utils };
+}
 
-//   return { ...utils };
-// }
+function setupWithSuccesfullRestaurantsRequest() {
+  const utils = setup();
 
-// function setupWithErrorRestaurantsRequest() {
-//   jest
-//     .spyOn(CreateHook, 'useCreateRestaurant')
-//     .mockImplementationOnce(() => [jest.fn(), {}]);
+  return { ...utils };
+}
 
-//   jest
-//     .spyOn(PaginatedHook, 'useGetPaginatedRestaurants')
-//     .mockImplementationOnce(() => ({
-//       status: 'error',
-//       resolvedData: { restaurants: [] },
-//       latestData: {},
-//       isFetching: false,
-//     }));
+function setupWithErrorRestaurantsRequest() {
+  const storeWithError = configureStore([thunk])({
+    restaurantList:{
+      items: [],
+      error: 'error',
+      pagination: null,
+      loading: 'idle',
+      crateLoading: 'idle',
+      restaurantIsCreated: false,
+    },
+  });
 
-//   const utils = setup();
+  const utils = setup(storeWithError);
 
-//   return { ...utils };
-// }
+  return { ...utils };
+}
 
-// describe('<Home />', () => {
-//   test('should call createRestaurant', async () => {
-//     // arrange
-//     const utils = setupWithSuccesfullFormSubmit();
+describe('<Home />', () => {
+  test('should call createRestaurant', async () => {
+    // arrange
+    const utils = setupWithSuccesfullFormSubmit();
 
-//     // assert
-//     await waitFor(() => {
-//       expect(utils.createRestaurant).toHaveBeenCalledTimes(1);
-//     });
-//   });
+    // assert
+    await waitFor(() => {
+      expect(utils.createRestaurant).toHaveBeenCalledTimes(1);
+    });
+  });
 
-//   test('should render a restaurant list', async () => {
-//     // arrange
-//     setupWithSuccesfullRestaurantsRequest();
+  test('should render a restaurant list', async () => {
+    // arrange
+    setupWithSuccesfullRestaurantsRequest();
 
-//     // assert
-//     expect(screen.getAllByAltText(/Restaurant Name/i)).toHaveLength(4);
-//   });
+    // assert
+    expect(screen.getAllByAltText(/Restaurant Name/i)).toHaveLength(4);
+  });
 
-//   test('should display the error message', async () => {
-//     // arrange
-//     setupWithErrorRestaurantsRequest();
+  test('should display the error message', async () => {
+    // arrange
+    setupWithErrorRestaurantsRequest();
 
-//     // assert
-//     expect(screen.getByText('Error')).toBeInTheDocument();
-//   });
-// });
+    // assert
+    expect(screen.getByText('Error')).toBeInTheDocument();
+  });
+});
