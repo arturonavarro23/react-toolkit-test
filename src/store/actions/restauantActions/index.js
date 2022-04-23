@@ -17,8 +17,8 @@ export const updateRestaurant = (restaurant) => async (dispatch, store) => {
     restaurant: { content },
   } = store();
   try {
-    const { data } = await api.put(`/restaurants/${restaurant.id}`, restaurant);
-    dispatch(actions.setRestaurant(data));
+    dispatch(actions.setRestaurant(restaurant));
+    await api.put(`/restaurants/${restaurant.id}`, restaurant);
   } catch (e) {
     dispatch(actions.setError(e));
     dispatch(actions.setRestaurant(content));
